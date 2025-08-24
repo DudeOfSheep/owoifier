@@ -1,0 +1,22 @@
+1: Minimal modification, only letter replacements, without replacing characters that would make the text indecipherable.
+"Hello, World! How are you today?" -> "Hewwo, World! How awe you today?"
+Path: Single replacement pass
+
+2: Extensive modification of words, and insertion of extra characters and extension of existing vowels. Ignoring nonsensibility.
+"Hello, World! How are you today?" -> "Hewwo, Wowwd!!! How awe youw twoday?"
+Path: Replacement Pass -> Vowel and Punctuation Pass
+
+3: Extreme modification of words beyond sensibility and adding on emoticons after punctuation.
+"Hello, World! How are you today?" -> "Hewwooo, Wowwd!!! :3 How awe youw twodayyy? Nya~ >_<"
+Path: Replacement Pass -> Randomized Vowel and Punctuation Extension pass -> Extra decorations and bits pass.
+
+
+--- Emotion ---
+Alter the text based on a manually inputted, and/or automatically detected emotion.
+EG Angry/Annoyed: "Shut up." -> "Shuddup!!! >M<" || Note: Combination of words would be difficult but funny
+EG Excited: "Yay!" -> "YIPPEE!!! >W<" || "Shut up." -> "SHUDDUP!!! :D" || Note: Elements of randomness should be used to spice up the output.
+EG Horny: "Forgive me father for I have sinned" -> "Fowgibe mwe daddy fow I habe sinned~" || Note: I can make this worse.
+
+Two possible implementations of this:
+1. A trait defining an Owoifier, defining functions for passes of each emotion type. Struct implementations would define each emotional conversion based on their intensity.
+2. An instantiable struct with several methods that can be chained to make an action path 
