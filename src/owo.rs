@@ -3,13 +3,13 @@ pub mod owo {
 
     // Type dictating all patterns that should be replaced and what with.
     // Lookahed dictates how far the matching algorithim looks ahead before making a final decision.
-    struct Context<'a> {
+    pub struct Context<'a> {
         pattern_map: HashMap<&'a str, &'a str>,
         lookahead: i32,
     }
 
     impl<'a> Context<'a> {
-        fn new(pattern_map: HashMap<&'a str, &'a str>) -> Context<'a> {
+        pub fn new(pattern_map: HashMap<&'a str, &'a str>) -> Context<'a> {
             let mut lookahead: i32 = 0;
 
             for key in pattern_map.keys() {
@@ -29,7 +29,7 @@ pub mod owo {
             }
         }
 
-        fn convert_string(&self, text: &mut String) {
+        pub fn convert_string(&self, text: &mut String) {
             for (k, r) in self.get_pattern_map().iter() {
                 *text = text.replace(k, r);
             }
