@@ -37,12 +37,12 @@ pub mod owo {
             pattern_map.insert("l", "w");
             pattern_map.insert("r", "w");
 
-            let mut hello_world = String::from("Hello, World!");
+            let hello_world = String::from("Hello, World!");
 
             let context = Context::new(pattern_map.clone());
-            context.convert_string(&mut hello_world);
+            context.convert_string(&hello_world);
 
-            assert_eq!(hello_world, "Hewwo, Wowwd!")
+            assert_eq!(context.convert_string(&hello_world), "Hewwo, Wowwd!")
         }
     }
 }
