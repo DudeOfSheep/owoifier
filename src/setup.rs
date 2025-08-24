@@ -60,15 +60,7 @@ pub mod configuration {
             let format: ConfigType = if "./" == &args[1].trim()[0..1] {
                 // Could do an if let here, maybe
                 // Note: Exists likes to return true even with invalid files.
-                match fs::exists(&args[1][1..]) {
-                    Ok(true) => ConfigType::FILE(args[1].clone()),
-                    Ok(false) => {
-                        return Err(Box::new(ParseError {
-                            path: String::from("File not found"),
-                        }));
-                    }
-                    Err(n) => return Err(Box::new(n)),
-                }
+                ConfigType::FILE(fs::File::open(&args[1][1..])?)
             } else {
                 ConfigType::BARE(args[1].clone())
             };
