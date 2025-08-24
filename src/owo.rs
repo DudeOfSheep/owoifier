@@ -14,11 +14,14 @@ pub mod owo {
 
         pub fn convert_string(&self, text: &String) -> String {
             let mut buf = text.clone();
+            dbg!(&buf);
 
             for (k, r) in self.get_pattern_map().iter() {
                 buf = buf.replace(k, r);
+                dbg!(&buf);
             }
 
+            dbg!(&buf);
             buf
         }
 
