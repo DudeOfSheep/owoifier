@@ -13,10 +13,12 @@ Path: Replacement Pass -> Randomized Vowel and Punctuation Extension pass -> Ext
 ALTERNATIVELY:
 
 Pattern replacement pass: Replace single characters or patterns based on context. Using a lookahead system based on the largest pattern.
+Word replacement pass: Split the string by whitespaces
 
-For each character:
+
+Split String by whitespaces, iterate over each word, match words with replacements or continue, match for the largest patterns, going down the context list until no more matches remain.
 1. Add char to buffer
-2. If more than one pattern contains or matches buffer, add matching keys to list.
+2. If more than one pattern contains/matches buffer, add matching keys to list.
 3. If keys list only has one key, replace matched pattern with the key's item.
 
 

@@ -1,11 +1,8 @@
 pub mod owo {
-    use std::{collections::HashMap, str::pattern::Pattern};
-    trait Owoifier {
-        fn replace_pass(text: &str) -> &str;
-        fn extension_pass(text: &str) -> &str;
-        fn insertion_pass(text: &str) -> &str;
-    }
+    use std::{collections::HashMap, env::consts::FAMILY, io::BufRead};
 
+    // Type dictating all patterns that should be replaced and what with.
+    // Lookahed dictates how far the matching algorithim looks ahead before making a final decision.
     struct Context<'a> {
         pattern_map: HashMap<&'a str, &'a str>,
         lookahead: i32,
@@ -17,6 +14,8 @@ pub mod owo {
 
             for key in pattern_map.keys() {
                 let key_len = key.len() as i32;
+
+                // Ugly
                 lookahead = if key_len > lookahead {
                     key_len
                 } else {
@@ -29,19 +28,34 @@ pub mod owo {
                 lookahead,
             }
         }
+
+        fn convert_string(&self, text: &mut String) {
+            for (k, r) in self.get_pattern_map().iter() {
+                *text = text.replace(k, r);
+            }
+        }
+
+        fn get_pattern_map(&self) -> &HashMap<&str, &str> {
+            &self.pattern_map
+        }
     }
 
-    pub fn basic_convert(text: &mut String) {
-        let buffer: String = text.drain(..).collect();
+    #[cfg(test)]
+    mod tests {
+        use super::*;
 
-        for item in buffer.chars() {
-            if item.is_alphabetic() {
-                match item {
-                    'r' => text.push('w'),
-                    'l' => text.push('w'),
-                    n => text.push(n),
-                }
-            }
+        #[test]
+        fn valid_context() {
+            let mut pattern_map: HashMap<&str, &str> = HashMap::new();
+            pattern_map.insert("l", "w");
+            pattern_map.insert("r", "w");
+
+            let mut hello_world = String::from("Hello, World!");
+
+            let context = Context::new(pattern_map.clone());
+            context.convert_string(&mut hello_world);
+
+            assert_eq!(hello_world, "Hewwo, Wowwd!")
         }
     }
 }
