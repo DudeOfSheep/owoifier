@@ -14,6 +14,11 @@ ALTERNATIVELY:
 
 Pattern replacement pass: Replace single characters or patterns based on context. Using a lookahead system based on the largest pattern.
 
+For each character:
+1. Add char to buffer
+2. If more than one pattern contains or matches buffer, add matching keys to list.
+3. If keys list only has one key, replace matched pattern with the key's item.
+
 
 --- Emotion ---
 Alter the text based on a manually inputted, and/or automatically detected emotion.
