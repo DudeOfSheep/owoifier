@@ -57,7 +57,8 @@ pub mod configuration {
 
         pub fn parse_args(args: &Vec<String>) -> Result<Config, Box<dyn Error>> {
             let format: ConfigType = if args[1].trim().starts_with("./") {
-                ConfigType::FILE(fs::File::open(&args[1][1..])?)
+                //Note, this is still bad. explicitely ask if the input is a file.
+                ConfigType::FILE(fs::File::open(&args[1][2..])?)
             } else {
                 ConfigType::BARE(args[1].clone())
             };

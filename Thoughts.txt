@@ -10,6 +10,10 @@ Path: Replacement Pass -> Vowel and Punctuation Pass
 "Hello, World! How are you today?" -> "Hewwooo, Wowwd!!! :3 How awe youw twodayyy? Nya~ >_<"
 Path: Replacement Pass -> Randomized Vowel and Punctuation Extension pass -> Extra decorations and bits pass.
 
+ALTERNATIVELY:
+
+Pattern replacement pass: Replace single characters or patterns based on context. Using a lookahead system based on the largest pattern.
+
 
 --- Emotion ---
 Alter the text based on a manually inputted, and/or automatically detected emotion.
@@ -19,4 +23,5 @@ EG Horny: "Forgive me father for I have sinned" -> "Fowgibe mwe daddy fow I habe
 
 Two possible implementations of this:
 1. A trait defining an Owoifier, defining functions for passes of each emotion type. Struct implementations would define each emotional conversion based on their intensity.
+-> An owoifier works by chainging actions into a path, that may continue infinitely. It's slow, but allows for modularity.
 2. An instantiable struct with several methods that can be chained to make an action path 
