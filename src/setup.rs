@@ -5,7 +5,7 @@ pub mod configuration {
         #[derive(Debug)]
         pub enum ConfigType {
             BARE(String),
-            FILE(File), // Might want to make this a filepath type
+            FILE(File),
         }
 
         pub struct Config {
@@ -55,11 +55,8 @@ pub mod configuration {
 
         impl Error for ParseError {}
 
-        // TODO: Make ConfigType::File a filepath type instead of a string
         pub fn parse_args(args: &Vec<String>) -> Result<Config, Box<dyn Error>> {
-            let format: ConfigType = if "./" == &args[1].trim()[0..1] {
-                // Could do an if let here, maybe
-                // Note: Exists likes to return true even with invalid files.
+            let format: ConfigType = if args[1].trim().starts_with("./") {
                 ConfigType::FILE(fs::File::open(&args[1][1..])?)
             } else {
                 ConfigType::BARE(args[1].clone())
@@ -106,7 +103,7 @@ pub mod configuration {
             fn invalid_path_file_parse() {
                 let valid_args: Vec<String> = vec![
                     String::from("PROGRAM PATH"),
-                    String::from("does_not_exist.txt"),
+                    String::from("./does_not_exist.txt"),
                     String::from("1"),
                     String::from("false"),
                 ];
