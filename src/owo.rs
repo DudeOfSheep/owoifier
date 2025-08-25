@@ -1,27 +1,24 @@
 pub mod owo {
-    use std::{collections::HashMap, env::consts::FAMILY, io::BufRead};
+    use std::collections::HashMap;
 
     // Type dictating all patterns that should be replaced and what with.
     // Lookahed dictates how far the matching algorithim looks ahead before making a final decision.
-    pub struct Context<'a> {
+    pub struct Owoifier<'a> {
         pattern_map: HashMap<&'a str, &'a str>,
     }
 
-    impl<'a> Context<'a> {
-        pub fn new(pattern_map: HashMap<&'a str, &'a str>) -> Context<'a> {
-            Context { pattern_map }
+    impl<'a> Owoifier<'a> {
+        pub fn new(pattern_map: HashMap<&'a str, &'a str>) -> Owoifier<'a> {
+            Owoifier { pattern_map }
         }
 
         pub fn convert_string(&self, text: &String) -> String {
             let mut buf = text.clone();
-            dbg!(&buf);
 
             for (k, r) in self.get_pattern_map().iter() {
                 buf = buf.replace(k, r);
-                dbg!(&buf);
             }
 
-            dbg!(&buf);
             buf
         }
 
@@ -42,7 +39,7 @@ pub mod owo {
 
             let hello_world = String::from("Hello, World!");
 
-            let context = Context::new(pattern_map.clone());
+            let context = Owoifier::new(pattern_map.clone());
             context.convert_string(&hello_world);
 
             assert_eq!(context.convert_string(&hello_world), "Hewwo, Wowwd!")
