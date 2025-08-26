@@ -20,16 +20,19 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut buf = String::new();
 
-    let context = Owoifier::new(pattern_map);
-
     match config.get_format() {
-        ConfigType::BARE(n) => {
-            println!("{}", context.convert_string(n))
-        } // Print converted text, easy_peasy.
-        ConfigType::FILE(n) => run(n.clone()), // Read the file, error checking, then convert
+        ConfigType::BARE(n) => run(n),
+        ConfigType::FILE(n) => run(n), // Read the file, error checking, then convert
     }
 
     Ok(())
 }
 
-fn run(text: String) {}
+fn run(text: &String, config: &Config) {
+    // Parse pattern file
+    match  config.{
+        
+    }
+    let translator = Owoifier::new(pattern_map);
+    println!(translator.convert_string(text.clone()))
+}

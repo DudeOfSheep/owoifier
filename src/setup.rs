@@ -1,6 +1,6 @@
 pub mod configuration {
     pub mod env_config {
-        use std::{error::Error, fs};
+        use std::{collections::HashMap, error::Error, fs, io::Error as IoError};
 
         #[derive(Debug)]
         pub enum ConfigType {
@@ -47,6 +47,33 @@ pub mod configuration {
 
             pub fn get_format(&self) -> &ConfigType {
                 &self.format
+            }
+
+            // Takes the intensity value from
+            pub fn get_intensity_pattern(
+                &self,
+                buffer: &mut HashMap<&str, &str>,
+            ) -> Result<bool, IoError> {
+                let file = fs::read_to_string("src\\pattern_map")?;
+
+                if let Ok(n) = file
+                    .split_inclusive('}')
+                    .collect::<Vec<&str>>()
+                    .get((&self.intensity - 1) as usize)
+                    .ok_or_else(|| false)
+                {
+                    for item in n.split_inclusive("\n") {
+                        let (k, v) = if let Some(n) = item.rsplit_once('|') {
+                            n
+                        } else {
+                            continue;
+                        };
+
+                        buffer.insert(k, v);
+                    }
+                };
+
+                Ok(true)
             }
         }
     }
