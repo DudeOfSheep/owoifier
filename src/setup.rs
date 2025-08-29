@@ -77,4 +77,22 @@ pub mod configuration {
             }
         }
     }
+
+    #[cfg(test)]
+    mod test {
+        use crate::setup::configuration::env_config::{Config, ConfigType};
+
+        use {
+            super::*,
+            std::{collections::HashMap, error::Error, fs, io::Error as IoError},
+        };
+
+        #[test]
+        fn file_parse_test() {
+            let mut buffer: HashMap<&str, &str> = HashMap::new();
+            let config = Config::new(ConfigType::FILE(String::from("src\\pattern_map")), 1, false)
+                .expect("Failed to create config");
+            config.get_intensity_pattern(&mut buffer);
+        }
+    }
 }
