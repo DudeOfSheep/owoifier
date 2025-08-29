@@ -3,8 +3,8 @@ pub mod setup;
 
 use crate::owo::owo::Owoifier;
 use crate::setup::configuration::env_config::{Config, ConfigType};
-use std::thread::panicking;
-use std::{collections::HashMap, env, error::Error};
+use std::fs;
+use std::{env, error::Error};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
@@ -17,7 +17,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     let config: Config = Config::parse_args(&args)?;
-    let mut buf = String::new();
 
     match config.get_format() {
         ConfigType::BARE(n) => run(n, &config),
@@ -28,15 +27,13 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 
 fn run(text: &String, config: &Config) {
-    let mut pattern_map: HashMap<&str, &str> = HashMap::new();
-    // Parse pattern file
-    match config.get_intensity_pattern(&mut pattern_map) {
-        Ok(true) => (),
-        Ok(false) => panic!("Pattern file could not be found!"),
-        Err(_) => panic!("Pattern file could not be parsed!"),
-    }
+    let mut file = fs::read_to_string("src\\pattern_map").expect("Failed to read pattern file");
 
-    let translator = Owoifier::new(pattern_map);
+    let translator = Owoifier::new(if let Ok(n) = config.get_intensity_pattern(&mut file) {
+        n
+    } else {
+        panic!("Pattern file could not be parsed!")
+    });
 
     println!("{}", translator.convert_string(&text))
 }

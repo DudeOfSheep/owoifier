@@ -50,11 +50,11 @@ pub mod configuration {
             }
 
             // Takes the intensity value from
-            pub fn get_intensity_pattern(
+            pub fn get_intensity_pattern<'a>(
                 &self,
-                buffer: &mut HashMap<&str, &str>,
-            ) -> Result<bool, IoError> {
-                let file = fs::read_to_string("src\\pattern_map")?;
+                file: &'a mut String,
+            ) -> Result<HashMap<&'a str, &'a str>, Box<dyn Error>> {
+                let mut buffer = HashMap::new();
 
                 if let Ok(n) = file
                     .split_inclusive('}')
@@ -73,7 +73,7 @@ pub mod configuration {
                     }
                 };
 
-                Ok(true)
+                Ok(buffer)
             }
         }
     }
@@ -89,10 +89,13 @@ pub mod configuration {
 
         #[test]
         fn file_parse_test() {
-            let mut buffer: HashMap<&str, &str> = HashMap::new();
+            let mut file =
+                fs::read_to_string("src\\pattern_map").expect("Could not find/read pattern file");
+
             let config = Config::new(ConfigType::FILE(String::from("src\\pattern_map")), 1, false)
                 .expect("Failed to create config");
-            config.get_intensity_pattern(&mut buffer);
+
+            dbg!(config.get_intensity_pattern(&mut file));
         }
     }
 }
