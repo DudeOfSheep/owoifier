@@ -2,7 +2,6 @@ pub mod owo {
     use std::collections::HashMap;
 
     // Type dictating all patterns that should be replaced and what with.
-    // Lookahed dictates how far the matching algorithim looks ahead before making a final decision.
     pub struct Owoifier<'a> {
         pattern_map: HashMap<&'a str, &'a str>,
     }

@@ -1,6 +1,6 @@
 pub mod configuration {
     pub mod env_config {
-        use std::{collections::HashMap, error::Error, fs, io::Error as IoError};
+        use std::{collections::HashMap, error::Error, fs};
 
         #[derive(Debug)]
         pub enum ConfigType {
@@ -63,7 +63,7 @@ pub mod configuration {
                     .ok_or_else(|| false)
                 {
                     for item in n.split_inclusive("\n") {
-                        let (k, v) = if let Some(n) = item.rsplit_once('|') {
+                        let (k, v) = if let Some(n) = item.trim().rsplit_once('|') {
                             n
                         } else {
                             continue;
@@ -75,27 +75,6 @@ pub mod configuration {
 
                 Ok(buffer)
             }
-        }
-    }
-
-    #[cfg(test)]
-    mod test {
-        use crate::setup::configuration::env_config::{Config, ConfigType};
-
-        use {
-            super::*,
-            std::{collections::HashMap, error::Error, fs, io::Error as IoError},
-        };
-
-        #[test]
-        fn file_parse_test() {
-            let mut file =
-                fs::read_to_string("src\\pattern_map").expect("Could not find/read pattern file");
-
-            let config = Config::new(ConfigType::FILE(String::from("src\\pattern_map")), 1, false)
-                .expect("Failed to create config");
-
-            dbg!(config.get_intensity_pattern(&mut file));
         }
     }
 }

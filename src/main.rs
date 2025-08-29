@@ -3,8 +3,7 @@ pub mod setup;
 
 use crate::owo::owo::Owoifier;
 use crate::setup::configuration::env_config::{Config, ConfigType};
-use std::fs;
-use std::{env, error::Error};
+use std::{env, error::Error, fs};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
