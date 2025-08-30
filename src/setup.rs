@@ -40,9 +40,9 @@ pub mod configuration {
                 };
 
                 match args.len() as i32 {
-                    1 => Ok(Config::new(format, 1, true)?),
-                    2 => Ok(Config::new(format, args[2].trim().parse::<i32>()?, true)?),
-                    3 => Ok(Config::new(
+                    2 => Ok(Config::new(format, 1, true)?),
+                    3 => Ok(Config::new(format, args[2].trim().parse::<i32>()?, true)?),
+                    4 => Ok(Config::new(
                         format,
                         args[2].trim().parse::<i32>()?,
                         args[3].trim().parse::<bool>()?,

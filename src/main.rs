@@ -8,9 +8,9 @@ use std::{env, error::Error, fs};
 fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
 
-    if (1..=3).contains(&args.len()) {
+    if 2 > args.len() {
         panic!(
-            "Expected 3 arguments, got {}! owoifier requires arguments \'string/filepath:\"\" intensity:1..3 return_output:bool\'",
+            "Expected 1-3 arguments, got {}! owoifier requires arguments \'string/filepath:\"\" intensity:1..3 return_output:bool\'",
             args.len() - 1
         );
     }
