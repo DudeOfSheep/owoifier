@@ -38,7 +38,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 
 fn run(text: &String, config: &Config) -> String {
-    let mut file = fs::read_to_string("src\\pattern_map").expect("Failed to read pattern file");
+    let mut file = fs::read_to_string("src\\pattern_map.txt").expect("Failed to read pattern file");
 
     let translator = Owoifier::new(if let Ok(n) = config.get_intensity_pattern(&mut file) {
         n
