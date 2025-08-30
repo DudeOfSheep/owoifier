@@ -17,15 +17,27 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let config: Config = Config::parse_args(&args)?;
 
-    match config.get_format() {
+    let res = match config.get_format() {
         ConfigType::BARE(n) => run(n, &config),
-        ConfigType::FILE(n) => run(n, &config), // Read the file, error checking, then convert
+        ConfigType::FILE(n) => {
+            println!("{}", &args[1][2..args[1].len() - 4]);
+            let res = run(n, &config);
+            fs::write(
+                format!("{}Owoified.txt", &args[1][2..args[1].len() - 4]),
+                &res,
+            )?;
+            res
+        } // Read the file, error checking, then convert
+    };
+
+    if *config.may_return() {
+        println!("{}", res);
     }
 
     Ok(())
 }
 
-fn run(text: &String, config: &Config) {
+fn run(text: &String, config: &Config) -> String {
     let mut file = fs::read_to_string("src\\pattern_map").expect("Failed to read pattern file");
 
     let translator = Owoifier::new(if let Ok(n) = config.get_intensity_pattern(&mut file) {
@@ -34,7 +46,5 @@ fn run(text: &String, config: &Config) {
         panic!("Pattern file could not be parsed!")
     });
 
-    if *config.may_return() {
-        println!("{}", translator.convert_string(&text))
-    }
+    format!("{}", translator.convert_string(&text))
 }
