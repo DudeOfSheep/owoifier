@@ -48,7 +48,7 @@ pub mod configuration {
                         args[3].trim().parse::<bool>()?,
                     )?),
                     _ => panic!(
-                        "Expected 3 arguments, got {}! owoifier requires arguments \'string/filepath:\"\" intensity:1..3 return_output:bool\'",
+                        "Expected 1-3 arguments, got {}! owoifier requires arguments \'string/filepath:\"\" intensity:1..3 return_output:bool\'",
                         args.len() - 1
                     ),
                 }
