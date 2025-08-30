@@ -31,6 +31,9 @@ th?|f?
 . |. :3
 }
 #3
+W|W-w
+H|H-h
+B|B-b-b
 l|w
 r|w
 v|b
@@ -47,4 +50,9 @@ th?|f?
 !|!!! :D 
 ?|?? :P 
 . |. :3 
+?!|??! :O 
+!?|!!? >:Ɛ 
+is|iz
+puppy|ouppy
+kitty|kibdy
 }
