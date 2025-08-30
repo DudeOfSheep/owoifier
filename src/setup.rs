@@ -39,9 +39,19 @@ pub mod configuration {
                     ConfigType::BARE(args[1].clone())
                 };
 
+                let return_output = if let ConfigType::BARE(_) = format {
+                    true
+                } else {
+                    false
+                };
+
                 match args.len() as i32 {
-                    2 => Ok(Config::new(format, 1, true)?),
-                    3 => Ok(Config::new(format, args[2].trim().parse::<i32>()?, true)?),
+                    2 => Ok(Config::new(format, 1, return_output)?),
+                    3 => Ok(Config::new(
+                        format,
+                        args[2].trim().parse::<i32>()?,
+                        return_output,
+                    )?),
                     4 => Ok(Config::new(
                         format,
                         args[2].trim().parse::<i32>()?,
@@ -56,6 +66,10 @@ pub mod configuration {
 
             pub fn get_format(&self) -> &ConfigType {
                 &self.format
+            }
+
+            pub fn may_return(&self) -> &bool {
+                &self.return_output
             }
 
             // Takes the intensity value from

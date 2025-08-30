@@ -34,5 +34,7 @@ fn run(text: &String, config: &Config) {
         panic!("Pattern file could not be parsed!")
     });
 
-    println!("{}", translator.convert_string(&text))
+    if *config.may_return() {
+        println!("{}", translator.convert_string(&text))
+    }
 }
