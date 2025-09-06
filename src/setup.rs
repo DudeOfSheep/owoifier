@@ -1,6 +1,10 @@
 pub mod configuration {
     pub mod env_config {
-        use std::{collections::HashMap, error::Error, fs};
+        use std::{
+            collections::HashMap,
+            error::{self, Error},
+            fs,
+        };
 
         #[derive(Debug)]
         pub enum ConfigType {
@@ -31,37 +35,33 @@ pub mod configuration {
                 }
             }
 
-            pub fn parse_args(args: &Vec<String>) -> Result<Config, Box<dyn Error>> {
-                let format: ConfigType = if args[1].trim().starts_with("./") {
-                    //Note, this is still bad. explicitely ask if the input is a file.
-                    ConfigType::FILE(fs::read_to_string(&args[1][2..])?)
-                } else {
-                    ConfigType::BARE(args[1].clone())
+            pub fn parse_args(
+                mut args: impl Iterator<Item = String>,
+            ) -> Result<Config, Box<dyn Error>> {
+                args.next();
+
+                let format: ConfigType = match args.next() {
+                    Some(n) => {
+                        if let Ok(x) = fs::read_to_string(&n) {
+                            ConfigType::FILE(x)
+                        } else {
+                            ConfigType::BARE(n)
+                        }
+                    }
+                    None => {
+                        panic!("Missing required text argument!"); // Find a way to construct an error. ffs.
+                    }
                 };
 
-                let return_output = if let ConfigType::BARE(_) = format {
-                    true
+                // Ugly
+                let intensity: i32 = if let Some(n) = args.next() {
+                    n.parse::<i32>()?
                 } else {
-                    false
+                    1
                 };
+                let return_output: bool = args.next().is_some_and(|x| !x.starts_with("./"));
 
-                match args.len() as i32 {
-                    2 => Ok(Config::new(format, 1, return_output)?),
-                    3 => Ok(Config::new(
-                        format,
-                        args[2].trim().parse::<i32>()?,
-                        return_output,
-                    )?),
-                    4 => Ok(Config::new(
-                        format,
-                        args[2].trim().parse::<i32>()?,
-                        args[3].trim().parse::<bool>()?,
-                    )?),
-                    _ => panic!(
-                        "Expected 1-3 arguments, got {}! owoifier requires arguments \'string/filepath:\"\" intensity:1..3 return_output:bool\'",
-                        args.len() - 1
-                    ),
-                }
+                Ok(Config::new(format, intensity, return_output)?)
             }
 
             pub fn get_format(&self) -> &ConfigType {
