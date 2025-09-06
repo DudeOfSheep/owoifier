@@ -3,7 +3,7 @@ pub mod setup;
 
 use crate::owo::owo::Owoifier;
 use crate::setup::configuration::env_config::{Config, ConfigType};
-use std::{env, error::Error, fs};
+use std::{env, error::Error, fs, process};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
@@ -15,13 +15,16 @@ fn main() -> Result<(), Box<dyn Error>> {
         );
     }
 
-    let config: Config = Config::parse_args(&args)?;
+    let config = Config::parse_args(env::args()).unwrap_or_else(|err| {
+        eprintln!("Issue parsing arguments {}", err);
+        process::exit(1)
+    });
 
-    let res = match config.get_format() {
-        ConfigType::BARE(n) => run(n, &config),
+    let res: String = match config.get_format() {
+        ConfigType::BARE(n) => run(n, &config)?,
         ConfigType::FILE(n) => {
             println!("{}", &args[1][2..args[1].len() - 4]);
-            let res = run(n, &config);
+            let res = run(n, &config)?;
             fs::write(
                 format!("{}Owoified.txt", &args[1][2..args[1].len() - 4]),
                 &res,
@@ -37,7 +40,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn run(text: &String, config: &Config) -> String {
+fn run(text: &String, config: &Config) -> Result<String, Box<dyn Error>> {
     let mut file = fs::read_to_string("src\\pattern_map.txt").expect("Failed to read pattern file");
 
     let translator = Owoifier::new(if let Ok(n) = config.get_intensity_pattern(&mut file) {
@@ -46,5 +49,5 @@ fn run(text: &String, config: &Config) -> String {
         panic!("Pattern file could not be parsed!")
     });
 
-    format!("{}", translator.convert_string(&text))
+    Ok(format!("{}", translator.convert_string(&text)))
 }
